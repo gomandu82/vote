@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>추수감사제 하모니상 투표</title>
+<link rel="preconnect" href="https://script.google.com">
+<link rel="preconnect" href="https://script.googleusercontent.com">
 <style>
 :root{--bg:#faf6ee;--card:#fff;--tx:#2b2418;--mu:#7a6e5c;--ac:#b45f1b;--ac2:#fbe9d6;--bd:#e6dccb}
 @media (prefers-color-scheme:dark){:root{--bg:#1d1a15;--card:#2a251d;--tx:#f1e9da;--mu:#b3a791;--ac:#f0a35e;--ac2:#3b2d1d;--bd:#40382b}}
@@ -70,6 +72,7 @@ var GROUPS=["사랑대목장","희락대목장","화평대목장","양선대목�
 var TARGETS=GROUPS.slice(0,8);
 var FIELDS=[{"k": "s1_title", "label": "① 첫 화면 - 제목", "def": "추수감사제"}, {"k": "s1_sub", "label": "① 첫 화면 - 안내 문구", "def": "나의 목장 또는 기관을 선택해 주세요"}, {"k": "s1_btn", "label": "① 첫 화면 - 버튼", "def": "선택하기"}, {"k": "s2_title", "label": "② 투표 화면 - 제목", "def": "하모니상 투표"}, {"k": "s2_sub", "label": "② 투표 화면 - 안내 문구", "def": "가장 잘 화합한 대목장을 선택해 주세요\n(소속 대목장은 선택할 수 없습니다)", "ml": true}, {"k": "s2_reason", "label": "② 투표 화면 - 이유 입력칸 제목", "def": "투표 이유 (선택)"}, {"k": "s2_ph", "label": "② 투표 화면 - 이유 입력칸 안내", "def": "이 대목장을 선택한 이유를 적어 주세요"}, {"k": "s2_btn", "label": "② 투표 화면 - 버튼", "def": "투표하기"}, {"k": "s3_verse", "label": "③ 말씀 화면 - 말씀", "def": "여호와께 감사하라\n그는 선하시고\n그 인자하심이 영원함이로다.", "ml": true}, {"k": "s3_ref", "label": "③ 말씀 화면 - 출처", "def": "시편 136:1"}, {"k": "s3_btn", "label": "③ 말씀 화면 - 버튼", "def": "투표마치기"}, {"k": "s4_title", "label": "④ 마지막 화면 - 제목", "def": "끝!"}, {"k": "s4_msg", "label": "④ 마지막 화면 - 감사 문구", "def": "투표해 주셔서 감사합니다"}];
 var CFG={"s1_title": "추수감사제", "s1_sub": "나의 목장 또는 기관을 선택해 주세요", "s1_btn": "선택하기", "s2_title": "하모니상 투표", "s2_sub": "가장 잘 화합한 대목장을 선택해 주세요\n(소속 대목장은 선택할 수 없습니다)", "s2_reason": "투표 이유 (선택)", "s2_ph": "이 대목장을 선택한 이유를 적어 주세요", "s2_btn": "투표하기", "s3_verse": "여호와께 감사하라\n그는 선하시고\n그 인자하심이 영원함이로다.", "s3_ref": "시편 136:1", "s3_btn": "투표마치기", "s4_title": "끝!", "s4_msg": "투표해 주셔서 감사합니다"};
+try{var cc=JSON.parse(localStorage.getItem("cfg_cache")||"null");if(cc&&cc.s1_title)CFG=cc;}catch(e){}
 function T(k){return CFG[k];}
 function tx(k){return esc(T(k)).replace(/\n/g,'<br>');}
 var app=document.getElementById("app");
@@ -246,7 +249,7 @@ app.addEventListener("click",function(e){
 render();
 // 관리자가 저장한 문구를 서버에서 불러와 적용
 google.script.run.withSuccessHandler(function(c){
-  if(c&&typeof c==='object'&&c.s1_title){CFG=c;if(!st.busy&&st.view==='vote'&&st.step===1)render();}
+  if(c&&typeof c==='object'&&c.s1_title){CFG=c;try{localStorage.setItem("cfg_cache",JSON.stringify(c));}catch(e){}if(!st.busy&&st.view==='vote'&&st.step===1)render();}
 }).withFailureHandler(function(){}).getSettings();
 </script>
 </body>
